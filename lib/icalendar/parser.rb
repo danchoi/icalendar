@@ -333,6 +333,14 @@ module Icalendar
           else
             timezone = params["TZID"].first if params["TZID"]
           end
+
+          # DAN CHOI DIRTY PATCH
+          # Time zone is not being parsed correctly.
+          # Need a better solution later.
+          if timezone =~ /Eastern Standard Time/ && result.zone == '+00:00'
+            result = DateTime.parse(result.to_s.sub("+00:00", Time.now.zone))
+          end
+
           result.icalendar_tzid = timezone
         end
         result
